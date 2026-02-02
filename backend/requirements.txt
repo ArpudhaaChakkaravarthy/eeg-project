@@ -1,9 +1,10 @@
 fastapi
 uvicorn
-scikit-learn
-pandas
-numpy
-joblib
+gunicorn
 firebase-admin
+numpy
+pandas
+scikit-learn
+scipy
 python-dotenv
 python-multipart
