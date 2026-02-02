@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroCognitive Assessment System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="glass-panel fade-enter" style="text-align: center; margin-bottom: 2rem;">
+            <h1>NeuroCognitive Assessment</h1>
+            <h2>EEG-Calibrated Performance Analysis</h2>
+        </header>
+
+        <!-- Step 1: User Info -->
+        <div id="step-info" class="glass-panel fade-enter">
+            <h2>User Profile</h2>
+            <p>Please enter your details to initialize the cognitive baseline.</p>
+            <input type="text" id="user-name" placeholder="Full Name">
+            <input type="number" id="user-age" placeholder="Age (Years)" min="6" max="100">
+            <button onclick="startAssessment()">Begin Assessment</button>
+        </div>
+
+        <!-- Step 2: Games Container -->
+        <div id="step-games" class="glass-panel hidden">
+            <div id="game-header">
+                <h2 id="game-title">Cognitive Task 1: Reaction Time</h2>
+                <div id="progress-bar"
+                    style="height: 4px; background: #334155; width: 100%; border-radius: 2px; margin-bottom: 2rem;">
+                    <div id="progress-fill"
+                        style="height: 100%; width: 0%; background: var(--accent); transition: width 0.5s;"></div>
+                </div>
+            </div>
+
+            <div id="game-area">
+                <!-- Game components injected here -->
+            </div>
+        </div>
+
+        <!-- Step 3: Loading Analysis -->
+        <div id="step-loading" class="glass-panel hidden" style="text-align: center;">
+            <span class="loader"></span>
+            <p style="margin-top: 1rem;">Analyzing performance against EEG datasets...</p>
+        </div>
+
+        <!-- Step 4: Results -->
+        <div id="step-results" class="glass-panel hidden">
+            <h2>Cognitive Analysis Report</h2>
+            <div id="result-content">
+                <!-- Text Results -->
+            </div>
+
+            <div class="chart-container" style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div
+                    style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1rem;">
+                    <h3 style="text-align: center; font-size: 1rem; color: #94a3b8;">Cognitive Profile</h3>
+                    <canvas id="radarChart"></canvas>
+                </div>
+                <div
+                    style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1rem;">
+                    <h3 style="text-align: center; font-size: 1rem; color: #94a3b8;">EEG Spectral Baseline</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <!-- V3: EEG Visualizations -->
+            <div class="chart-container" style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <!-- Brain Heatmap -->
+                <div
+                    style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1rem; display: flex; flex-direction: column; align-items: center;">
+                    <h3 style="text-align: center; font-size: 1rem; color: #94a3b8;">Brain Activity Heatmap</h3>
+                    <div id="brain-heatmap-container" style="width: 200px; height: 200px; margin-top: 1rem;"></div>
+                </div>
+
+                <!-- Focus Index Gauge -->
+                <div
+                    style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1rem;">
+                    <h3 style="text-align: center; font-size: 1rem; color: #94a3b8;">Focus Index (Beta/Theta)</h3>
+                    <div style="position: relative; height: 200px; width: 100%;">
+                        <canvas id="gaugeChart"></canvas>
+                        <div id="gauge-value"
+                            style="position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; font-size: 2rem; font-weight: bold;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live EEG Trace -->
+            <div style="margin-top: 1rem; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1rem;">
+                <h3 style="text-align: center; font-size: 1rem; color: #94a3b8;">Simulated Real-Time EEG Trace</h3>
+                <canvas id="eegTrace"
+                    style="width: 100%; height: 100px; filter: drop-shadow(0 0 5px var(--accent));"></canvas>
+            </div>
+
+            <button onclick="location.reload()" style="margin-top: 2rem;">Restart Assessment</button>
+        </div>
+    </div>
+
+    <script src="app.js?v=3"></script>
+    
+</body>
+
+</html>

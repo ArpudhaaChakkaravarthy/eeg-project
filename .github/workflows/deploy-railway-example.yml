@@ -1,0 +1,51 @@
+# Example GitHub Actions workflow for Railway deployments.
+# This file is a template; do not enable unless you set the required secrets.
+# Required secrets in GitHub: RAILWAY_API_TOKEN, RAILWAY_PROJECT_ID
+# Note: Railway typically offers a GitHub integration that auto-deploys on push —
+# using the CLI/API here is optional. Keep this file as a reference/template.
+
+name: CI and (Optional) Deploy to Railway
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Quick import check
+        working-directory: backend
+        run: python -c "import main; print('import ok')"
+
+  # NOTE: The Railway step below is commented out to avoid accidental errors.
+  # If you want to use it, uncomment and set `RAILWAY_API_TOKEN` and `RAILWAY_PROJECT_ID`.
+#  deploy-railway:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    if: ${{ secrets.RAILWAY_API_TOKEN && secrets.RAILWAY_PROJECT_ID }}
+#    steps:
+#      - uses: actions/checkout@v4
+#      - name: Install Railway CLI
+#        run: |
+#          npm install -g railway
+#      - name: Deploy to Railway
+#        env:
+#          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+#        run: |
+#          # The exact CLI commands depend on your Railway setup. The Railway CLI
+#          # may require interactive login; using an API-based deploy is recommended
+#          # via Railway's own GitHub integration. Keep this template for advanced use.
+#          railway login --apiKey $RAILWAY_API_TOKEN
+#          # Example: railway up --project ${{ secrets.RAILWAY_PROJECT_ID }} --yes
+#          echo "Railway deployment step placeholder. Use Railway GitHub integration for safe auto-deploys."

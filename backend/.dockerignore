@@ -1,0 +1,20 @@
+# Docker ignore for backend
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+.env.*
+.git
+.gitignore
+venv/
+build/
+dist/
+*.egg-info
+*.sqlite3
+*.db
+*.log
+.idea
+.vscode
+__pycache__/
+*.pem
