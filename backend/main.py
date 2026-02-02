@@ -117,6 +117,7 @@ class UserSubmission(BaseModel):
     attention_score: float
     spatial_score: float = 0
     symbol_match_score: float = 0
+    game_times: dict = {}  # New: Dict to store game completion times
 
 
 class AnalysisResult(BaseModel):
@@ -207,6 +208,7 @@ def analyze_performance(submission: UserSubmission):
                     "symbol_match_score": submission.symbol_match_score,
                     "overall_score": user_overall_score
                 },
+                "game_times_ms": submission.game_times,  # New: Store game completion times
                 "neural_benchmark": neural_benchmark,
                 "focus_index": round(focus_index, 2),
                 "predicted_state": state,

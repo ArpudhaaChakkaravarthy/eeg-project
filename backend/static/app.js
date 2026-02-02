@@ -9,6 +9,14 @@ const state = {
         spatial: 0, // score (grid)
         symbol: 0   // score (match)
     },
+    gameTimes: {
+        reaction: 0, // ms to complete
+        memory: 0,   // ms to complete
+        spatial: 0,  // ms to complete
+        symbol: 0,   // ms to complete
+        attention: 0 // ms to complete
+    },
+    gameStartTimes: {},
     currentGame: 0
 };
 
@@ -78,6 +86,7 @@ function showGameIntro(title, desc, callback) {
 
 // 1. Reaction Game
 function playReactionGame() {
+    state.gameStartTimes.reaction = Date.now();
     document.getElementById('game-title').innerText = "Task 1: Reaction Speed";
     updateProgress(10);
 
@@ -98,6 +107,7 @@ function playReactionGame() {
         if (trials.length >= totalReactionTrials) {
             const avg = trials.reduce((a, b) => a + b, 0) / trials.length;
             state.scores.reaction = avg;
+            state.gameTimes.reaction = Date.now() - state.gameStartTimes.reaction;
             showGameIntro('Task 2: Pattern Memory', 'Watch the sequence of numbers and repeat them. Be ready to type the sequence.', playMemoryGame);
             return;
         }
@@ -137,6 +147,7 @@ function playReactionGame() {
 
 // 2. Memory Game (Numeric Sequence)
 function playMemoryGame() {
+    state.gameStartTimes.memory = Date.now();
     document.getElementById('game-title').innerText = "Task 2: Pattern Memory";
     updateProgress(30);
 
@@ -196,6 +207,9 @@ function playMemoryGame() {
             correctCount++;
             level++;
         }
+        if (roundsPlayed >= maxMemoryRounds) {
+            state.gameTimes.memory = Date.now() - state.gameStartTimes.memory;
+        }
         playRound();
     };
 
@@ -204,6 +218,7 @@ function playMemoryGame() {
 
 // 3. Spatial Grid Game (New)
 function playSpatialGridGame() {
+    state.gameStartTimes.spatial = Date.now();
     document.getElementById('game-title').innerText = "Task 3: Spatial Memory";
     updateProgress(50);
 
@@ -262,6 +277,7 @@ function playSpatialGridGame() {
         if (userPattern.length === pattern.length) {
             let correct = userPattern.filter(x => pattern.includes(x)).length;
             state.scores.spatial = (correct / pattern.length) * 100;
+            state.gameTimes.spatial = Date.now() - state.gameStartTimes.spatial;
             setTimeout(() => showGameIntro('Task 4: Processing Speed', 'Decide quickly if two symbols match. Press YES or NO.', playSymbolMatchGame), 1000);
         }
     }
@@ -271,6 +287,7 @@ function playSpatialGridGame() {
 
 // 4. Symbol Match Game (New)
 function playSymbolMatchGame() {
+    state.gameStartTimes.symbol = Date.now();
     document.getElementById('game-title').innerText = "Task 4: Processing Speed";
     updateProgress(70);
 
@@ -313,6 +330,9 @@ function playSymbolMatchGame() {
     window.answerSymbol = function (val) {
         if (val === isMatch) score++;
         document.getElementById('sym-score').innerText = `Score: ${score}/${rounds}`;
+        if (rounds >= maxSymbolRounds) {
+            state.gameTimes.symbol = Date.now() - state.gameStartTimes.symbol;
+        }
         nextRound();
     };
 
@@ -321,6 +341,7 @@ function playSymbolMatchGame() {
 
 // 5. Attention Game (Stroop)
 function playAttentionGame() {
+    state.gameStartTimes.attention = Date.now();
     document.getElementById('game-title').innerText = "Task 5: Attention Focus";
     updateProgress(90);
 
@@ -366,6 +387,9 @@ function playAttentionGame() {
 
     window.answerStroop = function (val) {
         if (val === currentMatch) score++;
+        if (rounds >= maxStroopRounds) {
+            state.gameTimes.attention = Date.now() - state.gameStartTimes.attention;
+        }
         nextRound();
     };
 
@@ -391,7 +415,14 @@ async function finishAssessment() {
                 reaction_time: state.scores.reaction,
                 attention_score: state.scores.attention,
                 spatial_score: state.scores.spatial,
-                symbol_match_score: state.scores.symbol
+                symbol_match_score: state.scores.symbol,
+                game_times: {
+                    reaction_time_ms: state.gameTimes.reaction,
+                    memory_time_ms: state.gameTimes.memory,
+                    spatial_time_ms: state.gameTimes.spatial,
+                    symbol_time_ms: state.gameTimes.symbol,
+                    attention_time_ms: state.gameTimes.attention
+                }
             })
         });
 
